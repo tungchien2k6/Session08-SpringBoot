@@ -5,11 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@ControllerAdvice
 public class GlobalHandlerException {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
@@ -18,6 +20,12 @@ public class GlobalHandlerException {
             errors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseWrapper.builder().errors(errors));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseWrapper.builder().errors(errors).message("Validate thất bại").httpCode(HttpStatus.BAD_REQUEST.value()).build());
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ResponseWrapper.error(null, e.getMessage(), HttpStatus.NOT_FOUND.value()));
     }
 }

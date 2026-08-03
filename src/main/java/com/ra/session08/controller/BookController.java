@@ -3,6 +3,7 @@ package com.ra.session08.controller;
 import com.ra.session08.model.dto.request.BookRequestDTO;
 import com.ra.session08.model.dto.response.BookResponseDTO;
 import com.ra.session08.model.dto.response.ResponseWrapper;
+import com.ra.session08.model.dto.request.BookUpdateStockDTO;
 import com.ra.session08.service.BookService;
 import jakarta.validation.Valid;
 import lombok.*;
@@ -28,5 +29,11 @@ public class BookController {
     public ResponseEntity<?> createBook(@Valid @ModelAttribute BookRequestDTO bookRequestDTO) {
         BookResponseDTO book = bookService.createBook(bookRequestDTO);
         return new ResponseEntity<>(book, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<?> updateBook(@PathVariable Long id,@Valid  @RequestBody BookUpdateStockDTO bookUpdateStockDTO) {
+        BookResponseDTO book = bookService.updateBook(id, bookUpdateStockDTO);
+        return new ResponseEntity<>(book, HttpStatus.OK);
     }
 }

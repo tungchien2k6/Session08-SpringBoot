@@ -1,6 +1,8 @@
 package com.ra.session08.service.impl;
 
+import com.ra.session08.exception.ResourceNotFoundException;
 import com.ra.session08.model.dto.request.BookRequestDTO;
+import com.ra.session08.model.dto.request.BookUpdateStockDTO;
 import com.ra.session08.model.dto.response.BookResponseDTO;
 import com.ra.session08.model.entity.Book;
 import com.ra.session08.model.mapper.BookMapper;
@@ -34,5 +36,13 @@ public class BookServiceImpl implements BookService {
         book.setCoverUrl(coverUrl);
         Book bookNew =  bookRepository.save(book);
         return bookMapper.bookToBookResponseDTO(bookNew);
+    }
+
+     @Override
+     public BookResponseDTO updateBook(Long id, BookUpdateStockDTO bookUpdateStockDTO) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy sách với id: " + id));
+        book.setStock(bookUpdateStockDTO.getStock());
+        Book updatedBook = bookRepository.save(book);
+        return bookMapper.bookToBookResponseDTO(updatedBook);
     }
 }
