@@ -27,6 +27,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public BookResponseDTO getBookById(Long id) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy sách với id: " + id));
+        return bookMapper.bookToBookResponseDTO(book);
+    }
+
+    @Override
     public BookResponseDTO createBook(BookRequestDTO bookRequestDTO) {
         String coverUrl = "";
         if (bookRequestDTO.getCoverUrl() != null) {

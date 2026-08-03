@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface BookService {
     List<BookResponseDTO> getBooks();
+    BookResponseDTO getBookById(Long id);
     BookResponseDTO createBook(BookRequestDTO bookRequestDTO);
     BookResponseDTO updateBook(Long id, BookUpdateStockDTO bookUpdateStockDTO);
 }
